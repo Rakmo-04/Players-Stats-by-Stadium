@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2; /* Set a light gray background color */
+            color: #333; /* Set a dark text color for better readability */
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        div {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #428bca; /* Set a blue background color for the button */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3071a9; /* Darken the button color on hover */
+        }
+
+        #dataContainer {
+            margin-top: 20px;
+        }
+        .container {
+            text-align: center;
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 400px;
+            background-color: #fff; /* Set a white background color for the container */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow for a card-like effect */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2; /* Set a light gray background color for table headings */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Player Data</h1>
+    <div class ="container">
+    <div>
+        <label for="stadiumName">Stadium Name:</label>
+        <input type="text" id="stadiumName" placeholder="Enter stadium name">
+    </div>
+    <div>
+        <label for="playerName">Player Name:</label>
+        <input type="text" id="playerName" placeholder="Enter player name">
+    </div>
+    <button onclick="fetchData()">Get Player Data</button>
+</div>
+    <div id="dataContainer"></div>
+
+    
+
+    <script>
+        function fetchData() {
+            const stadiumName = document.getElementById("stadiumName").value;
+            const playerName = document.getElementById("playerName").value;
+
+            fetch(`/api/player_data/${encodeURIComponent(stadiumName)}/${encodeURIComponent(playerName)}`)
+                .then(response => response.json())
+                .then(data => displayData(data))
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function displayData(data) {
+            const dataContainer = document.getElementById("dataContainer");
+            let html = '<h2>Player Data:</h2><table><tr><th>Player Name</th><th>Stadium Name</th><th>Role</th><th>Country</th><th>Highest Runs</th><th>Average Runs</th><th>Strike Rate</th><th>Total Wickets</th><th>Economy</th><th>Dots</th></tr>';
+            data.forEach(player => {
+                html += `
+                    <tr>
+                        <td>${player.Player_Name}</td>
+                        <td>${player.Stadium_Name}</td>
+                        <td>${player.Role}</td>
+                        <td>${player.Country}</td>
+                        <td>${player.Highest_Runs || '-'}</td>
+                        <td>${player.Average_Runs || '-'}</td>
+                        <td>${player.Strike_Rate || '-'}</td>
+                        <td>${player.Total_Wickets || '-'}</td>
+                        <td>${player.Economy || '-'}</td>
+                        <td>${player.Dots || '-'}</td>
+                    </tr>
+                `;
+            });
+            html += '</table>';
+            dataContainer.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bar-chart {
+            text-align: center;
+            margin: 20px auto;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        div {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #428bca;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3071a9;
+        }
+
+        #dataContainer {
+            margin-top: 20px;
+        }
+
+        .container {
+            text-align: center;
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Player Data</h1>
+    <div class="container">
+        <div>
+            <label for="stadiumName">Stadium Name:</label>
+            <input type="text" id="stadiumName" placeholder="Enter stadium name">
+        </div>
+        <div>
+            <label for="playerName">Player Name:</label>
+            <input type="text" id="playerName" placeholder="Enter player name">
+        </div>
+        <button onclick="fetchData()">Get Player Data</button>
+    </div>
+
+    <div class="bar-chart" id="barChartContainer">
+        <!-- Bar chart will be displayed here -->
+        <img id="barChartImage" src="" alt="Bar Chart">
+    </div>
+
+    <div id="dataContainer"></div>
+
+    <script>
+        function fetchData() {
+            const stadiumName = document.getElementById("stadiumName").value;
+            const playerName = document.getElementById("playerName").value;
+
+            fetch(`/api/player_data/${encodeURIComponent(stadiumName)}/${encodeURIComponent(playerName)}`)
+                .then(response => response.json())
+                .then(data => displayData(data))
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function displayData(data) {
+            const dataContainer = document.getElementById("dataContainer");
+            const barChartImage = document.getElementById("barChartImage");
+            let html = '<h2>Player Data:</h2><table><tr><th>Player Name</th><th>Stadium Name</th><th>Role</th><th>Country</th><th>Highest Runs</th><th>Average Runs</th><th>Strike Rate</th><th>Total Wickets</th><th>Economy</th><th>Dots</th></tr>';
+            data.player_data.forEach(player => {
+                html += `
+                    <tr>
+                        <td>${player.Player_Name}</td>
+                        <td>${player.Stadium_Name}</td>
+                        <td>${player.Role}</td>
+                        <td>${player.Country}</td>
+                        <td>${player.Highest_Runs || '-'}</td>
+                        <td>${player.Average_Runs || '-'}</td>
+                        <td>${player.Strike_Rate || '-'}</td>
+                        <td>${player.Total_Wickets || '-'}</td>
+                        <td>${player.Economy || '-'}</td>
+                        <td>${player.Dots || '-'}</td>
+                    </tr>
+                `;
+            });
+            html += '</table>';
+            dataContainer.innerHTML = html;
+
+            // Display the bar chart image
+            if (data.bar_chart_data) {
+                barChartImage.src = `data:image/png;base64, ${data.bar_chart_data}`;
+            } else {
+                barChartImage.src = ''; // Clear the image source if no bar chart data is available
+            }
+        }
+        
+    </script>
+</body>
+</html>

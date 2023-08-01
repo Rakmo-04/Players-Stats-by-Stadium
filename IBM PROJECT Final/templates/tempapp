@@ -1,0 +1,178 @@
+from flask import Flask, jsonify, render_template
+import pandas as pd
+import numpy as np  # Import numpy for handling NaN values
+
+app = Flask(__name__)
+
+# Read the CSV file into a pandas DataFrame
+dataset = pd.read_csv('CSV_FILE_PATH.csv')
+
+# Function to find player data based on stadium_name and player_name
+def find_player_data(stadium_name, player_name):
+    filtered_data = dataset[
+        (dataset['Stadium_Name'] == stadium_name) &
+        (dataset['Player_Name'] == player_name) &
+        (dataset.apply(lambda row: all(cell != 'NA' for cell in row), axis=1))
+    ]
+    return filtered_data.replace({np.nan: None}).to_dict(orient='records')
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/api/player_data/<stadium_name>/<player_name>')
+def get_player_data(stadium_name, player_name):
+    filtered_data = find_player_data(stadium_name, player_name)
+    return jsonify(filtered_data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    from flask import Flask, jsonify, render_template
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import io
+import base64
+
+app = Flask(__name__)
+
+# Read the CSV file into a pandas DataFrame
+dataset = pd.read_csv('CSV_FILE_PATH.csv')
+
+# Function to find player data based on stadium_name and player_name
+def find_player_data(stadium_name, player_name):
+    filtered_data = dataset[
+        (dataset['Stadium_Name'] == stadium_name) &
+        (dataset['Player_Name'] == player_name) &
+        (dataset.apply(lambda row: all(cell != 'NA' for cell in row), axis=1))
+    ]
+    return filtered_data.replace({np.nan: None}).to_dict(orient='records')
+
+# Function to generate a bar chart for a player
+
+def generate_bar_chart(stadium_name, player_name):
+    filtered_data = find_player_data(stadium_name, player_name)
+
+    if filtered_data:  # Check if the list is not empty
+        roles = pd.DataFrame(filtered_data)['Role'].value_counts()
+        plt.figure(figsize=(8, 6))
+        plt.pie(roles, labels=roles.index, autopct='%1.1f%%', startangle=140)
+        plt.title(f"Role Distribution for {player_name} in {stadium_name}")
+        plt.axis('equal')
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        chart_data = base64.b64encode(buf.read()).decode()
+        buf.close()
+        return chart_data
+
+    return None
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/api/player_data/<stadium_name>/<player_name>')
+def get_player_data(stadium_name, player_name):
+    try:
+        player_data = find_player_data(stadium_name, player_name)
+        bar_chart_data = generate_bar_chart(stadium_name, player_name)
+        response_data = {
+            'player_data': player_data,
+            'bar_chart_data': bar_chart_data
+        }
+        return jsonify(response_data)
+    except Exception as e:
+        error_message = f"An error occurred: {str(e)}"
+        print(error_message)  # Add this line for logging
+        return jsonify({'error': error_message}), 500
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
